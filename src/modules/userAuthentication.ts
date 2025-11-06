@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import { User } from "kybervision20db";
+import { User } from "kybervision22db";
 
 // Extend Request interface to include user property
 declare global {
@@ -11,7 +11,11 @@ declare global {
   }
 }
 
-export async function authenticateToken(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function authenticateToken(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   if (process.env.AUTHENTIFICATION_TURNED_OFF === "true") {
     const user = await User.findOne({ where: { email: "nrodrig1@gmail.com" } });
     req.user = { id: user?.id };

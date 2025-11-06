@@ -1,7 +1,7 @@
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import { Video } from "kybervision20db";
+import { Video } from "kybervision22db";
 import ffmpeg from "fluent-ffmpeg";
 import axios from "axios";
 import { google } from "googleapis";
@@ -58,7 +58,11 @@ export const upload = multer({
 });
 
 // ✅ New function to rename video files with desired format
-export function renameVideoFile(videoId: number, sessionId: number, userId?: number): string {
+export function renameVideoFile(
+  videoId: number,
+  sessionId: number,
+  userId?: number
+): string {
   // Ensure the numbers are formatted with leading zeros
   const formattedVideoId = videoId.toString().padStart(4, "0");
   return `${process.env.PREFIX_VIDEO_FILE_NAME}-videoId${formattedVideoId}-sessionId${sessionId}.mp4`;
@@ -71,11 +75,11 @@ export async function deleteVideo(videoId: number): Promise<VideoDeleteResult> {
     if (!video) {
       return { success: false, error: "Video not found" };
     }
-    
+
     if (!video.filename) {
       return { success: false, error: "Video filename is missing" };
     }
-    
+
     const filePathToVideoFile = path.join(
       video.pathToVideoFile || process.env.PATH_VIDEOS_UPLOADED!,
       video.filename
@@ -93,7 +97,7 @@ export async function deleteVideo(videoId: number): Promise<VideoDeleteResult> {
       process.env.PATH_VIDEOS_UPLOADED!,
       video.filename
     );
-    
+
     fs.unlink(filePathToVideoFileInUpload, (err) => {
       if (err) {
         console.error(
@@ -111,7 +115,9 @@ export async function deleteVideo(videoId: number): Promise<VideoDeleteResult> {
   }
 }
 
-export async function deleteVideoFromYouTube(videoId: number): Promise<VideoDeleteResult> {
+export async function deleteVideoFromYouTube(
+  videoId: number
+): Promise<VideoDeleteResult> {
   try {
     const video = await Video.findByPk(videoId);
 
@@ -133,7 +139,7 @@ export async function deleteVideoFromYouTube(videoId: number): Promise<VideoDele
       version: "v3",
       auth: oauth2Client,
     });
-    
+
     console.log(`YouTube video ID: ${video.youTubeVideoId}`);
     await youtube.videos.delete({
       id: video.youTubeVideoId,
@@ -172,14 +178,14 @@ export async function requestJobQueuerVideoUploaderYouTubeProcessing(
 
     const responseJson = await response.json();
     console.log("✅ Queuer YouTube response:", responseJson);
-    
+
     return {
       result: true,
       messageFromYouTubeQueuer: "YouTube video uploaded successfully",
     };
   } catch (err: any) {
     console.error("❌ Error contacting YouTube Queuer:", err.message);
-    
+
     return {
       result: false,
       messageFromYouTubeQueuer: `Is KyberVisionQueuer running? Error from attempt to contact Queuer: ${err.message}`,

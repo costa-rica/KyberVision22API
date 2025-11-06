@@ -1,9 +1,4 @@
-import {
-  ContractLeagueTeam,
-  League,
-  Session,
-  Team,
-} from "kybervision20db";
+import { ContractLeagueTeam, League, Session, Team } from "kybervision22db";
 
 interface SessionResult {
   success: boolean;
@@ -19,7 +14,9 @@ interface SessionWithTeamData {
   teamCoach?: string;
 }
 
-export async function createSessionWithFreeAgentLeague(teamId: number): Promise<any | null> {
+export async function createSessionWithFreeAgentLeague(
+  teamId: number
+): Promise<any | null> {
   try {
     const freeAgentLeague = await League.findOne({
       where: { name: "Free Agent League" },
@@ -50,7 +47,9 @@ export async function createSessionWithFreeAgentLeague(teamId: number): Promise<
   }
 }
 
-export async function createSession(sessionData: Record<string, any>): Promise<SessionResult> {
+export async function createSession(
+  sessionData: Record<string, any>
+): Promise<SessionResult> {
   try {
     const session = await Session.create(sessionData as any);
     return { success: true, session };
@@ -75,7 +74,9 @@ export async function deleteSession(sessionId: number): Promise<SessionResult> {
   }
 }
 
-export async function getSessionWithTeams(sessionId: number): Promise<SessionResult> {
+export async function getSessionWithTeams(
+  sessionId: number
+): Promise<SessionResult> {
   try {
     // Fetch session with team details
     const session = await Session.findByPk(sessionId, {
@@ -97,7 +98,7 @@ export async function getSessionWithTeams(sessionId: number): Promise<SessionRes
 
     // Access team data through association
     const sessionJSON = session.toJSON() as any;
-    
+
     // Rename team attributes by prefixing them
     const formattedSession: SessionWithTeamData = {
       ...sessionJSON,

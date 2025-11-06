@@ -12,7 +12,7 @@ import {
   Action,
   ContractVideoAction,
   Script,
-} from "kybervision20db";
+} from "kybervision22db";
 import { getSessionWithTeams } from "../modules/sessions";
 import {
   upload,
@@ -64,45 +64,49 @@ router.get("/", authenticateToken, async (req: Request, res: Response) => {
 });
 
 // 🔹 GET /videos/team/:teamId - Get All Team Videos with Match Data
-router.get("/team/:teamId", authenticateToken, async (req: Request, res: Response) => {
-  console.log(`- in GET /api/videos/team/:teamId`);
-  try {
-    const teamId = Number(req.params.teamId);
-    console.log(`teamId: ${teamId}`);
-    
-    // Fetch videos whose contractTeamUser is associated with the given teamId
-    const videosArray = await Video.findAll({
-      include: [
-        {
-          model: ContractTeamUser,
-          where: { teamId },
-          attributes: ["id", "teamId", "userId"], // optional: include related info
-        },
-      ],
-      where: { processingCompleted: true },
-    });
+router.get(
+  "/team/:teamId",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    console.log(`- in GET /api/videos/team/:teamId`);
+    try {
+      const teamId = Number(req.params.teamId);
+      console.log(`teamId: ${teamId}`);
 
-    // Process videos to include match & team details
-    const formattedVideos = await Promise.all(
-      videosArray.map(async (video) => {
-        const sessionData = await getSessionWithTeams(video.sessionId);
-        return {
-          ...video.get(), // Extract raw video data
-          session: sessionData.success ? sessionData.session : null, // Include session data if successful
-        };
-      })
-    );
+      // Fetch videos whose contractTeamUser is associated with the given teamId
+      const videosArray = await Video.findAll({
+        include: [
+          {
+            model: ContractTeamUser,
+            where: { teamId },
+            attributes: ["id", "teamId", "userId"], // optional: include related info
+          },
+        ],
+        where: { processingCompleted: true },
+      });
 
-    res.json({ result: true, videosArray: formattedVideos });
-  } catch (error: any) {
-    console.error("Error fetching videos:", error);
-    res.status(500).json({
-      result: false,
-      message: "Internal Server Error",
-      error: error.message,
-    });
+      // Process videos to include match & team details
+      const formattedVideos = await Promise.all(
+        videosArray.map(async (video) => {
+          const sessionData = await getSessionWithTeams(video.sessionId);
+          return {
+            ...video.get(), // Extract raw video data
+            session: sessionData.success ? sessionData.session : null, // Include session data if successful
+          };
+        })
+      );
+
+      res.json({ result: true, videosArray: formattedVideos });
+    } catch (error: any) {
+      console.error("Error fetching videos:", error);
+      res.status(500).json({
+        result: false,
+        message: "Internal Server Error",
+        error: error.message,
+      });
+    }
   }
-});
+);
 
 // 🔹 POST /videos/upload-youtube
 router.post(
@@ -178,7 +182,11 @@ router.post(
       });
 
       // Step 3.1: Rename the uploaded file
-      const renamedFilename = renameVideoFile(newVideo.id, Number(sessionId), user.id);
+      const renamedFilename = renameVideoFile(
+        newVideo.id,
+        Number(sessionId),
+        user.id
+      );
       const renamedFilePath = path.join(
         process.env.PATH_VIDEOS_UPLOADED!,
         renamedFilename
@@ -243,40 +251,44 @@ router.post(
 );
 
 // 🔹 DELETE /videos/:videoId
-router.delete("/:videoId", authenticateToken, async (req: Request, res: Response) => {
-  try {
-    const videoId = Number(req.params.videoId);
+router.delete(
+  "/:videoId",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    try {
+      const videoId = Number(req.params.videoId);
 
-    const {
-      success: successYouTube,
-      message: messageYouTube,
-      error: errorYouTube,
-    } = await deleteVideoFromYouTube(videoId);
-    
-    console.log(
-      `YouTube delete response: ${JSON.stringify({
-        successYouTube,
-        messageYouTube,
-        errorYouTube,
-      })}`
-    );
-    
-    if (!successYouTube) {
-      console.log("-- No YouTube video to delete");
+      const {
+        success: successYouTube,
+        message: messageYouTube,
+        error: errorYouTube,
+      } = await deleteVideoFromYouTube(videoId);
+
+      console.log(
+        `YouTube delete response: ${JSON.stringify({
+          successYouTube,
+          messageYouTube,
+          errorYouTube,
+        })}`
+      );
+
+      if (!successYouTube) {
+        console.log("-- No YouTube video to delete");
+      }
+
+      const { success, message, error } = await deleteVideo(videoId);
+
+      if (!success) {
+        return res.status(404).json({ error });
+      }
+
+      res.status(200).json({ message });
+    } catch (error: any) {
+      console.error("Error in DELETE /videos/:videoId:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
-
-    const { success, message, error } = await deleteVideo(videoId);
-
-    if (!success) {
-      return res.status(404).json({ error });
-    }
-
-    res.status(200).json({ message });
-  } catch (error: any) {
-    console.error("Error in DELETE /videos/:videoId:", error);
-    res.status(500).json({ error: "Internal server error" });
   }
-});
+);
 
 // 🔹 POST /videos/montage-service/queue-a-job: Queue a job to process a video montage
 router.post(
@@ -284,11 +296,11 @@ router.post(
   authenticateToken,
   async (req: Request, res: Response) => {
     console.log("Received request to queue a job...");
-    
+
     try {
       const { videoId, actionsArray, token } = req.body;
       const user = req.user;
-      
+
       const videoObj = await Video.findByPk(Number(videoId));
 
       if (!videoObj) {
@@ -339,18 +351,20 @@ router.post(
   authenticateToken,
   async (req: Request, res: Response) => {
     console.log("- in POST /montage-service/video-completed-notify-user");
-    
+
     try {
       const { filename } = req.body;
       const userId = req.user.id;
-      
+
       writeRequestArgs(req.body, "-04-montage-service");
-      
+
       const user = await User.findByPk(userId);
       if (!user) {
-        return res.status(404).json({ result: false, message: "User not found" });
+        return res
+          .status(404)
+          .json({ result: false, message: "User not found" });
       }
-      
+
       console.log(`filename: ${filename}`);
       console.log(`userId: ${userId}`);
 
@@ -361,7 +375,7 @@ router.post(
         user.email,
         tokenizedFilename
       );
-      
+
       res.json({ result: true, message: "Email sent successfully" });
     } catch (error: any) {
       console.error("Error in video montage notification:", error);
@@ -381,12 +395,12 @@ router.get(
     console.log(
       "- in GET /montage-service/play-video/:tokenizedMontageFilename"
     );
-    
+
     const { tokenizedMontageFilename } = req.params;
     console.log("------ Check Token from play-video -----");
     console.log(tokenizedMontageFilename);
     console.log("------ ENDCheck Token from play-video -----");
-    
+
     // 🔹 Verify token
     jwt.verify(
       tokenizedMontageFilename,
@@ -400,13 +414,13 @@ router.get(
 
         const { filename } = decoded; // Extract full path
         console.log(`📂 Decoded filename: ${filename}`);
-        
+
         const videoFilePathAndName = path.join(
           process.env.PATH_VIDEOS_MONTAGE_COMPLETE!,
           filename
         );
         console.log(`📂 Video file path: ${videoFilePathAndName}`);
-        
+
         // 🔹 Check if the file exists
         if (!fs.existsSync(videoFilePathAndName)) {
           return res
@@ -516,7 +530,7 @@ router.get("/user", authenticateToken, async (req: Request, res: Response) => {
         };
       })
     );
-    
+
     res.json({ result: true, videosArray: formattedVideos });
   } catch (error: any) {
     console.error("Error fetching videos:", error);

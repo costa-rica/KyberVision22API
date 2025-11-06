@@ -1,14 +1,18 @@
-import { Player, ContractTeamPlayer } from "kybervision20db";
+import { Player, ContractTeamPlayer } from "kybervision22db";
 
 interface Action {
   playerId: number;
   [key: string]: any;
 }
 
-export async function createUniquePlayerObjArray(actions: Action[]): Promise<any[]> {
+export async function createUniquePlayerObjArray(
+  actions: Action[]
+): Promise<any[]> {
   try {
     // 🔹 Extract unique player IDs
-    const uniquePlayerIds = Array.from(new Set(actions.map((action) => action.playerId)));
+    const uniquePlayerIds = Array.from(
+      new Set(actions.map((action) => action.playerId))
+    );
 
     if (uniquePlayerIds.length === 0) {
       return []; // Return empty array if no players are found
@@ -27,10 +31,14 @@ export async function createUniquePlayerObjArray(actions: Action[]): Promise<any
   }
 }
 
-export async function createUniquePlayerNamesArray(actions: Action[]): Promise<string[]> {
+export async function createUniquePlayerNamesArray(
+  actions: Action[]
+): Promise<string[]> {
   try {
     // 🔹 Extract unique player IDs
-    const uniquePlayerIds = Array.from(new Set(actions.map((action) => action.playerId)));
+    const uniquePlayerIds = Array.from(
+      new Set(actions.map((action) => action.playerId))
+    );
 
     if (uniquePlayerIds.length === 0) {
       return []; // Return empty array if no players are found
@@ -43,7 +51,9 @@ export async function createUniquePlayerNamesArray(actions: Action[]): Promise<s
     });
 
     // 🔹 Extract first names and ensure uniqueness
-    const uniquePlayerNames = Array.from(new Set(players.map((player) => player.firstName)));
+    const uniquePlayerNames = Array.from(
+      new Set(players.map((player) => player.firstName))
+    );
 
     return uniquePlayerNames;
   } catch (error: any) {
@@ -65,7 +75,7 @@ export async function addNewPlayerToTeam(
       firstName,
       lastName: lastName || "", // Provide empty string as default if null/undefined
     });
-    
+
     await ContractTeamPlayer.create({
       teamId,
       playerId: playerNew.id,
@@ -73,7 +83,7 @@ export async function addNewPlayerToTeam(
       position,
       positionAbbreviation,
     });
-    
+
     return { ...playerNew.toJSON(), teamId };
   } catch (error: any) {
     console.error("Error adding player to team:", error);

@@ -6,7 +6,7 @@ import {
   Session,
   ContractLeagueTeam,
   ContractUserAction,
-} from "kybervision20db";
+} from "kybervision22db";
 import { authenticateToken } from "../modules/userAuthentication";
 import { createEstimatedTimestampStartOfVideo } from "../modules/contractVideoAction";
 import {
@@ -55,8 +55,12 @@ router.post(
                 contractVideoAction.videoId === Number(videoId)
             );
 
-            const actionTimestamp = new Date(actionWithoutContractVideoActions.timestamp).getTime();
-            const referenceTimestamp = new Date(scriptsArray[i].timestampReferenceFirstAction || 0).getTime();
+            const actionTimestamp = new Date(
+              actionWithoutContractVideoActions.timestamp
+            ).getTime();
+            const referenceTimestamp = new Date(
+              scriptsArray[i].timestampReferenceFirstAction || 0
+            ).getTime();
             const differenceInTimeActionMinusTimestampReferenceFirstAction =
               (actionTimestamp - referenceTimestamp) / 1000;
 
@@ -129,120 +133,130 @@ router.post(
 );
 
 // GET /sessions/:teamId
-router.get("/:teamId", authenticateToken, async (req: Request, res: Response) => {
-  console.log(`- in GET /sessions/${req.params.teamId}`);
+router.get(
+  "/:teamId",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    console.log(`- in GET /sessions/${req.params.teamId}`);
 
-  try {
-    const { teamId } = req.params;
-    console.log(`teamId: ${teamId}`);
+    try {
+      const { teamId } = req.params;
+      console.log(`teamId: ${teamId}`);
 
-    // 🔹 Find all Sessions linked to this teamId
-    const sessionsArray = await Session.findAll({
-      where: { teamId },
-    });
+      // 🔹 Find all Sessions linked to this teamId
+      const sessionsArray = await Session.findAll({
+        where: { teamId },
+      });
 
-    if (sessionsArray.length === 0) {
-      return res.json({ result: true, sessionsArray: [] });
-    }
+      if (sessionsArray.length === 0) {
+        return res.json({ result: true, sessionsArray: [] });
+      }
 
-    // ---- KEEP THIS ------
-    // Format sessionDateString for each session
-    const formattedSessionsArray = sessionsArray.map((session) => {
-      const date = new Date(session.sessionDate);
-      const day = date.getDate().toString().padStart(2, "0"); // "15"
-      const month = date.toLocaleString("fr-FR", { month: "short" }); // "mar"
-      const hour = date.getHours().toString().padStart(2, "0"); // "20"
-      const minute = date.getMinutes().toString().padStart(2, "0"); // "00"
+      // ---- KEEP THIS ------
+      // Format sessionDateString for each session
+      const formattedSessionsArray = sessionsArray.map((session) => {
+        const date = new Date(session.sessionDate);
+        const day = date.getDate().toString().padStart(2, "0"); // "15"
+        const month = date.toLocaleString("fr-FR", { month: "short" }); // "mar"
+        const hour = date.getHours().toString().padStart(2, "0"); // "20"
+        const minute = date.getMinutes().toString().padStart(2, "0"); // "00"
 
-      return {
-        ...session.toJSON(),
-        sessionDateString: `${day} ${month} ${hour}h${minute}`, // "15 mar 20h00"
-        sessionDate: date,
-      };
-    });
-    // ---- [end] KEEP THIS ------
+        return {
+          ...session.toJSON(),
+          sessionDateString: `${day} ${month} ${hour}h${minute}`, // "15 mar 20h00"
+          sessionDate: date,
+        };
+      });
+      // ---- [end] KEEP THIS ------
 
-    res.json({ result: true, sessionsArray: formattedSessionsArray });
-  } catch (error: any) {
-    console.error("❌ Error fetching sessions for teamId:", error);
-    res.status(500).json({
-      result: false,
-      message: "Internal server error",
-      error: error.message,
-    });
-  }
-});
-
-// POST /sessions/create
-router.post("/create", authenticateToken, async (req: Request, res: Response) => {
-  console.log(`- in POST /sessions/create`);
-
-  try {
-    const {
-      teamId,
-      sessionDate,
-      contractLeagueTeamId,
-      sessionName,
-      sessionCity,
-    } = req.body;
-    const city = "Practice";
-    console.log(`teamId: ${teamId}`);
-    console.log(`sessionDate: ${sessionDate}`);
-    console.log(`city: ${city}`);
-
-    // find contractLeagueTeam For now use default League
-    const contractLeagueTeam = await ContractLeagueTeam.findOne({
-      where: { id: 1 },
-    });
-
-    if (!contractLeagueTeam) {
-      return res.status(404).json({
+      res.json({ result: true, sessionsArray: formattedSessionsArray });
+    } catch (error: any) {
+      console.error("❌ Error fetching sessions for teamId:", error);
+      res.status(500).json({
         result: false,
-        message: "Default league contract not found",
+        message: "Internal server error",
+        error: error.message,
       });
     }
-
-    // 🔹 Create new Session
-    const sessionNew = await Session.create({
-      teamId,
-      sessionDate,
-      city: sessionCity,
-      contractLeagueTeamId: contractLeagueTeam.id,
-      sessionName,
-    });
-
-    console.log(`sessionNew: ${JSON.stringify(sessionNew)}`);
-
-    // Format sessionDateString for sessionNew
-    const sessionDate_obj = new Date(sessionNew.sessionDate);
-    const formattedSessionNew = {
-      ...sessionNew.toJSON(),
-      sessionDateString: `${sessionDate_obj
-        .getDate()
-        .toString()
-        .padStart(2, "0")} ${sessionDate_obj.toLocaleString("fr-FR", {
-        month: "short",
-      })} ${sessionDate_obj
-        .getHours()
-        .toString()
-        .padStart(2, "0")}h${sessionDate_obj
-        .getMinutes()
-        .toString()
-        .padStart(2, "0")}`, // "15 mar 20h00"
-    };
-
-    console.log(`formattedSessionNew: ${JSON.stringify(formattedSessionNew)}`);
-
-    res.json({ result: true, sessionNew: formattedSessionNew });
-  } catch (error: any) {
-    console.error("❌ Error creating session:", error);
-    res.status(500).json({
-      result: false,
-      message: "Internal server error",
-      error: error.message,
-    });
   }
-});
+);
+
+// POST /sessions/create
+router.post(
+  "/create",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    console.log(`- in POST /sessions/create`);
+
+    try {
+      const {
+        teamId,
+        sessionDate,
+        contractLeagueTeamId,
+        sessionName,
+        sessionCity,
+      } = req.body;
+      const city = "Practice";
+      console.log(`teamId: ${teamId}`);
+      console.log(`sessionDate: ${sessionDate}`);
+      console.log(`city: ${city}`);
+
+      // find contractLeagueTeam For now use default League
+      const contractLeagueTeam = await ContractLeagueTeam.findOne({
+        where: { id: 1 },
+      });
+
+      if (!contractLeagueTeam) {
+        return res.status(404).json({
+          result: false,
+          message: "Default league contract not found",
+        });
+      }
+
+      // 🔹 Create new Session
+      const sessionNew = await Session.create({
+        teamId,
+        sessionDate,
+        city: sessionCity,
+        contractLeagueTeamId: contractLeagueTeam.id,
+        sessionName,
+      });
+
+      console.log(`sessionNew: ${JSON.stringify(sessionNew)}`);
+
+      // Format sessionDateString for sessionNew
+      const sessionDate_obj = new Date(sessionNew.sessionDate);
+      const formattedSessionNew = {
+        ...sessionNew.toJSON(),
+        sessionDateString: `${sessionDate_obj
+          .getDate()
+          .toString()
+          .padStart(2, "0")} ${sessionDate_obj.toLocaleString("fr-FR", {
+          month: "short",
+        })} ${sessionDate_obj
+          .getHours()
+          .toString()
+          .padStart(2, "0")}h${sessionDate_obj
+          .getMinutes()
+          .toString()
+          .padStart(2, "0")}`, // "15 mar 20h00"
+      };
+
+      console.log(
+        `formattedSessionNew: ${JSON.stringify(formattedSessionNew)}`
+      );
+
+      res.json({ result: true, sessionNew: formattedSessionNew });
+    } catch (error: any) {
+      console.error("❌ Error creating session:", error);
+      res.status(500).json({
+        result: false,
+        message: "Internal server error",
+        error: error.message,
+      });
+    }
+  }
+);
 
 // This is used for the mobile ScriptingSyncVideo Screen (after the user has selected a video)
 // GET /sessions/scripting-sync-video/:sessionId/actions
@@ -314,13 +328,16 @@ router.get(
 
         const actionsArrayModified = actionsArray.map((action, index) => {
           const actionJSON = action.toJSON() as any;
-          const { ContractVideoActions, ...actionWithoutContractVideoActions } = actionJSON;
+          const { ContractVideoActions, ...actionWithoutContractVideoActions } =
+            actionJSON;
 
           const contractVideoAction = ContractVideoActions?.[0];
           const deltaTime = contractVideoAction?.deltaTimeInSeconds || 0;
 
           const actionTimestamp = new Date(action.timestamp).getTime();
-          const referenceTimestamp = new Date(scriptsArray[i].timestampReferenceFirstAction || 0).getTime();
+          const referenceTimestamp = new Date(
+            scriptsArray[i].timestampReferenceFirstAction || 0
+          ).getTime();
           const videoTimestampCalculation =
             (actionTimestamp - referenceTimestamp + deltaTime * 1000) / 1000;
 

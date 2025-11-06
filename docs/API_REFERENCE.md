@@ -1,6 +1,6 @@
-# KyberVision20 API Reference
+# KyberVision22 API Reference
 
-This document provides comprehensive documentation for all API endpoints in the KyberVision20 Express.js TypeScript API. The API serves as the central connection point for all KyberVision universe applications to interact with the SQLite database using Sequelize ORM.
+This document provides comprehensive documentation for all API endpoints in the KyberVision22 Express.js TypeScript API. The API serves as the central connection point for all KyberVision universe applications to interact with the SQLite database using Sequelize ORM.
 
 ## Base URL
 
@@ -41,10 +41,10 @@ Creates a new user account and handles invitation processing.
 
 ```json
 {
-	"firstName": "string",
-	"lastName": "string",
-	"password": "string (required)",
-	"email": "string (required, unique)"
+  "firstName": "string",
+  "lastName": "string",
+  "password": "string (required)",
+  "email": "string (required, unique)"
 }
 ```
 
@@ -52,15 +52,15 @@ Creates a new user account and handles invitation processing.
 
 ```json
 {
-	"message": "Successfully created user",
-	"user": {
-		"id": "number",
-		"firstName": "string",
-		"lastName": "string",
-		"email": "string",
-		"username": "string"
-	},
-	"token": "string (JWT)"
+  "message": "Successfully created user",
+  "user": {
+    "id": "number",
+    "firstName": "string",
+    "lastName": "string",
+    "email": "string",
+    "username": "string"
+  },
+  "token": "string (JWT)"
 }
 ```
 
@@ -80,8 +80,8 @@ Authenticates a user and returns a JWT token.
 
 ```json
 {
-	"email": "string (required)",
-	"password": "string (required)"
+  "email": "string (required)",
+  "password": "string (required)"
 }
 ```
 
@@ -89,16 +89,16 @@ Authenticates a user and returns a JWT token.
 
 ```json
 {
-	"message": "Connexion r�ussie.",
-	"token": "string (JWT)",
-	"user": {
-		"id": "number",
-		"firstName": "string",
-		"lastName": "string",
-		"email": "string",
-		"username": "string",
-		"ContractTeamUsers": []
-	}
+  "message": "Connexion r�ussie.",
+  "token": "string (JWT)",
+  "user": {
+    "id": "number",
+    "firstName": "string",
+    "lastName": "string",
+    "email": "string",
+    "username": "string",
+    "ContractTeamUsers": []
+  }
 }
 ```
 
@@ -127,8 +127,8 @@ Retrieves all data from a specific database table.
 
 ```json
 {
-	"result": true,
-	"data": []
+  "result": true,
+  "data": []
 }
 ```
 
@@ -146,9 +146,9 @@ Creates a backup of the entire database as a ZIP file.
 
 ```json
 {
-	"result": true,
-	"message": "Database backup completed",
-	"backupFile": "string (file path)"
+  "result": true,
+  "message": "Database backup completed",
+  "backupFile": "string (file path)"
 }
 ```
 
@@ -160,8 +160,8 @@ Lists all available database backup files.
 
 ```json
 {
-	"result": true,
-	"backups": ["string array of zip filenames"]
+  "result": true,
+  "backups": ["string array of zip filenames"]
 }
 ```
 
@@ -181,13 +181,13 @@ Returns row counts for all database tables.
 
 ```json
 {
-	"result": true,
-	"arrayRowCountsByTable": [
-		{
-			"tableName": "string",
-			"rowCount": "number"
-		}
-	]
+  "result": true,
+  "arrayRowCountsByTable": [
+    {
+      "tableName": "string",
+      "rowCount": "number"
+    }
+  ]
 }
 ```
 
@@ -201,8 +201,8 @@ Imports data from a backup ZIP file.
 
 ```json
 {
-	"result": true,
-	"message": "Import completed successfully"
+  "result": true,
+  "message": "Import completed successfully"
 }
 ```
 
@@ -228,9 +228,9 @@ Deletes the entire database file after creating a backup.
 
 ```json
 {
-	"result": true,
-	"message": "Database successfully deleted.",
-	"backupFile": "string (backup file path)"
+  "result": true,
+  "message": "Database successfully deleted.",
+  "backupFile": "string (backup file path)"
 }
 ```
 
@@ -280,18 +280,18 @@ Retrieves all teams in the system.
 
 ```json
 {
-	"result": true,
-	"teams": [
-		{
-			"id": "number",
-			"teamName": "string",
-			"city": "string",
-			"coachName": "string",
-			"description": "string",
-			"image": "string",
-			"visibility": "string"
-		}
-	]
+  "result": true,
+  "teams": [
+    {
+      "id": "number",
+      "teamName": "string",
+      "city": "string",
+      "coachName": "string",
+      "description": "string",
+      "image": "string",
+      "visibility": "string"
+    }
+  ]
 }
 ```
 
@@ -303,18 +303,18 @@ Creates a new team with optional players.
 
 ```json
 {
-	"teamName": "string (required)",
-	"description": "string",
-	"playersArray": [
-		{
-			"firstName": "string",
-			"lastName": "string",
-			"shirtNumber": "number",
-			"position": "string",
-			"positionAbbreviation": "string"
-		}
-	],
-	"leagueName": "string"
+  "teamName": "string (required)",
+  "description": "string",
+  "playersArray": [
+    {
+      "firstName": "string",
+      "lastName": "string",
+      "shirtNumber": "number",
+      "position": "string",
+      "positionAbbreviation": "string"
+    }
+  ],
+  "leagueName": "string"
 }
 ```
 
@@ -322,13 +322,13 @@ Creates a new team with optional players.
 
 ```json
 {
-	"result": true,
-	"teamNew": {
-		"id": "number",
-		"teamName": "string",
-		"description": "string",
-		"playersArray": []
-	}
+  "result": true,
+  "teamNew": {
+    "id": "number",
+    "teamName": "string",
+    "description": "string",
+    "playersArray": []
+  }
 }
 ```
 
@@ -347,8 +347,8 @@ Updates a team's visibility setting.
 
 ```json
 {
-	"teamId": "number (required)",
-	"visibility": "string (required)"
+  "teamId": "number (required)",
+  "visibility": "string (required)"
 }
 ```
 
@@ -360,12 +360,12 @@ Adds a new player to an existing team.
 
 ```json
 {
-	"teamId": "number (required)",
-	"firstName": "string (required)",
-	"lastName": "string",
-	"shirtNumber": "number",
-	"position": "string",
-	"positionAbbreviation": "string"
+  "teamId": "number (required)",
+  "firstName": "string (required)",
+  "lastName": "string",
+  "shirtNumber": "number",
+  "position": "string",
+  "positionAbbreviation": "string"
 }
 ```
 
@@ -377,8 +377,8 @@ Removes a player from a team.
 
 ```json
 {
-	"teamId": "number (required)",
-	"playerId": "number (required)"
+  "teamId": "number (required)",
+  "playerId": "number (required)"
 }
 ```
 
@@ -396,25 +396,25 @@ Gets all teams associated with the authenticated user.
 
 ```json
 {
-	"teamsArray": [
-		{
-			"id": "number",
-			"teamName": "string",
-			"city": "string",
-			"coachName": "string",
-			"genericJoinToken": "string (JWT)"
-		}
-	],
-	"contractTeamUserArray": [
-		{
-			"id": "number",
-			"userId": "number",
-			"teamId": "number",
-			"isSuperUser": "boolean",
-			"isAdmin": "boolean",
-			"isCoach": "boolean"
-		}
-	]
+  "teamsArray": [
+    {
+      "id": "number",
+      "teamName": "string",
+      "city": "string",
+      "coachName": "string",
+      "genericJoinToken": "string (JWT)"
+    }
+  ],
+  "contractTeamUserArray": [
+    {
+      "id": "number",
+      "userId": "number",
+      "teamId": "number",
+      "isSuperUser": "boolean",
+      "isAdmin": "boolean",
+      "isCoach": "boolean"
+    }
+  ]
 }
 ```
 
@@ -436,9 +436,9 @@ Creates or updates a team membership contract.
 
 ```json
 {
-	"isSuperUser": "boolean",
-	"isAdmin": "boolean",
-	"isCoach": "boolean"
+  "isSuperUser": "boolean",
+  "isAdmin": "boolean",
+  "isCoach": "boolean"
 }
 ```
 
@@ -454,19 +454,19 @@ Gets all squad members for a specific team.
 
 ```json
 {
-	"squadArray": [
-		{
-			"id": "number",
-			"userId": "number",
-			"username": "string",
-			"email": "string",
-			"isSuperUser": "boolean",
-			"isAdmin": "boolean",
-			"isCoach": "boolean",
-			"isPlayer": "boolean",
-			"playerId": "number"
-		}
-	]
+  "squadArray": [
+    {
+      "id": "number",
+      "userId": "number",
+      "username": "string",
+      "email": "string",
+      "isSuperUser": "boolean",
+      "isAdmin": "boolean",
+      "isCoach": "boolean",
+      "isPlayer": "boolean",
+      "playerId": "number"
+    }
+  ]
 }
 ```
 
@@ -478,8 +478,8 @@ Adds a new member to a team by email.
 
 ```json
 {
-	"teamId": "number (required)",
-	"email": "string (required)"
+  "teamId": "number (required)",
+  "email": "string (required)"
 }
 ```
 
@@ -501,7 +501,7 @@ Generates a temporary join token for a team.
 
 ```json
 {
-	"shareUrl": "string (full URL with token)"
+  "shareUrl": "string (full URL with token)"
 }
 ```
 
@@ -527,9 +527,9 @@ Toggles role permissions for a team member.
 
 ```json
 {
-	"teamId": "number (required)",
-	"userId": "number (required)",
-	"role": "string (Coach|Admin|Member)"
+  "teamId": "number (required)",
+  "userId": "number (required)",
+  "role": "string (Coach|Admin|Member)"
 }
 ```
 
@@ -541,7 +541,7 @@ Removes a user from a team.
 
 ```json
 {
-	"contractTeamUserId": "number (required)"
+  "contractTeamUserId": "number (required)"
 }
 ```
 
@@ -563,28 +563,28 @@ Gets all players associated with a specific team.
 
 ```json
 {
-	"result": true,
-	"team": {
-		"id": "number",
-		"teamName": "string"
-	},
-	"playersArray": [
-		{
-			"id": "number",
-			"firstName": "string",
-			"lastName": "string",
-			"birthDate": "string (date)",
-			"shirtNumber": "number",
-			"position": "string",
-			"positionAbbreviation": "string",
-			"role": "string",
-			"image": "string",
-			"isUser": "boolean",
-			"userId": "number",
-			"username": "string",
-			"email": "string"
-		}
-	]
+  "result": true,
+  "team": {
+    "id": "number",
+    "teamName": "string"
+  },
+  "playersArray": [
+    {
+      "id": "number",
+      "firstName": "string",
+      "lastName": "string",
+      "birthDate": "string (date)",
+      "shirtNumber": "number",
+      "position": "string",
+      "positionAbbreviation": "string",
+      "role": "string",
+      "image": "string",
+      "isUser": "boolean",
+      "userId": "number",
+      "username": "string",
+      "email": "string"
+    }
+  ]
 }
 ```
 
@@ -618,8 +618,8 @@ Links a user account to a player profile.
 
 ```json
 {
-	"playerId": "number (required)",
-	"userId": "number (required)"
+  "playerId": "number (required)",
+  "userId": "number (required)"
 }
 ```
 
@@ -651,13 +651,13 @@ Updates user's favorite actions for a session.
 
 ```json
 {
-	"sessionId": "number (required)",
-	"actionsArray": [
-		{
-			"actionsDbTableId": "number",
-			"isFavorite": "boolean"
-		}
-	]
+  "sessionId": "number (required)",
+  "actionsArray": [
+    {
+      "actionsDbTableId": "number",
+      "isFavorite": "boolean"
+    }
+  ]
 }
 ```
 
@@ -681,9 +681,9 @@ Updates the time synchronization offset for all actions in a script relative to 
 
 ```json
 {
-	"newDeltaTimeInSeconds": "number (required)",
-	"scriptId": "number (required)",
-	"videoId": "number (required)"
+  "newDeltaTimeInSeconds": "number (required)",
+  "scriptId": "number (required)",
+  "videoId": "number (required)"
 }
 ```
 
@@ -691,10 +691,10 @@ Updates the time synchronization offset for all actions in a script relative to 
 
 ```json
 {
-	"result": true,
-	"message": "ContractVideoAction modified with success",
-	"scriptId": "number",
-	"updatedCount": "number"
+  "result": true,
+  "message": "ContractVideoAction modified with success",
+  "scriptId": "number",
+  "updatedCount": "number"
 }
 ```
 
@@ -722,13 +722,13 @@ Gets all leagues associated with a specific team.
 
 ```json
 {
-	"leaguesArray": [
-		{
-			"id": "number",
-			"name": "string",
-			"contractLeagueTeamId": "number"
-		}
-	]
+  "leaguesArray": [
+    {
+      "id": "number",
+      "name": "string",
+      "contractLeagueTeamId": "number"
+    }
+  ]
 }
 ```
 
@@ -752,8 +752,8 @@ Gets all actions for a session with video synchronization data for review.
 
 ```json
 {
-	"sessionId": "number (required)",
-	"videoId": "number (required)"
+  "sessionId": "number (required)",
+  "videoId": "number (required)"
 }
 ```
 
@@ -761,25 +761,25 @@ Gets all actions for a session with video synchronization data for review.
 
 ```json
 {
-	"result": true,
-	"sessionId": "number",
-	"videoId": "number",
-	"actionsArray": [
-		{
-			"id": "number",
-			"type": "number",
-			"quality": "string",
-			"timestamp": "string (date)",
-			"area": "string",
-			"setNumber": "number",
-			"scoreTeamAnalyzed": "number",
-			"scoreTeamOther": "number",
-			"timestampFromStartOfVideo": "number",
-			"reviewVideoActionsArrayIndex": "number",
-			"favorite": "boolean"
-		}
-	],
-	"playerDbObjectsArray": []
+  "result": true,
+  "sessionId": "number",
+  "videoId": "number",
+  "actionsArray": [
+    {
+      "id": "number",
+      "type": "number",
+      "quality": "string",
+      "timestamp": "string (date)",
+      "area": "string",
+      "setNumber": "number",
+      "scoreTeamAnalyzed": "number",
+      "scoreTeamOther": "number",
+      "timestampFromStartOfVideo": "number",
+      "reviewVideoActionsArrayIndex": "number",
+      "favorite": "boolean"
+    }
+  ],
+  "playerDbObjectsArray": []
 }
 ```
 
@@ -803,17 +803,17 @@ Gets all sessions for a specific team.
 
 ```json
 {
-	"result": true,
-	"sessionsArray": [
-		{
-			"id": "number",
-			"teamId": "number",
-			"sessionDate": "string (date)",
-			"city": "string",
-			"sessionName": "string",
-			"sessionDateString": "string (formatted)"
-		}
-	]
+  "result": true,
+  "sessionsArray": [
+    {
+      "id": "number",
+      "teamId": "number",
+      "sessionDate": "string (date)",
+      "city": "string",
+      "sessionName": "string",
+      "sessionDateString": "string (formatted)"
+    }
+  ]
 }
 ```
 
@@ -830,11 +830,11 @@ Creates a new training session or match.
 
 ```json
 {
-	"teamId": "number (required)",
-	"sessionDate": "string (date, required)",
-	"contractLeagueTeamId": "number",
-	"sessionName": "string",
-	"sessionCity": "string"
+  "teamId": "number (required)",
+  "sessionDate": "string (date, required)",
+  "contractLeagueTeamId": "number",
+  "sessionName": "string",
+  "sessionCity": "string"
 }
 ```
 
@@ -842,15 +842,15 @@ Creates a new training session or match.
 
 ```json
 {
-	"result": true,
-	"sessionNew": {
-		"id": "number",
-		"teamId": "number",
-		"sessionDate": "string",
-		"city": "string",
-		"sessionName": "string",
-		"sessionDateString": "string (formatted)"
-	}
+  "result": true,
+  "sessionNew": {
+    "id": "number",
+    "teamId": "number",
+    "sessionDate": "string",
+    "city": "string",
+    "sessionName": "string",
+    "sessionDateString": "string (formatted)"
+  }
 }
 ```
 
@@ -866,8 +866,8 @@ Gets basic action data for video synchronization.
 
 ```json
 {
-	"result": true,
-	"actionsArray": []
+  "result": true,
+  "actionsArray": []
 }
 ```
 
@@ -883,16 +883,16 @@ Gets detailed action data with synchronization information for script-based vide
 
 ```json
 {
-	"result": true,
-	"sessionId": "number",
-	"actionsArrayByScript": [
-		{
-			"scriptId": "number",
-			"actionsArray": [],
-			"deltaTimeInSecondsIsSameForAllActions": "boolean",
-			"deltaTimeInSeconds": "number"
-		}
-	]
+  "result": true,
+  "sessionId": "number",
+  "actionsArrayByScript": [
+    {
+      "scriptId": "number",
+      "actionsArray": [],
+      "deltaTimeInSecondsIsSameForAllActions": "boolean",
+      "deltaTimeInSeconds": "number"
+    }
+  ]
 }
 ```
 
@@ -910,24 +910,24 @@ Gets all videos in the system with session data.
 
 ```json
 {
-	"result": true,
-	"videosArray": [
-		{
-			"id": "number",
-			"sessionId": "number",
-			"filename": "string",
-			"url": "string",
-			"videoFileSizeInMb": "number",
-			"processingCompleted": "boolean",
-			"processingFailed": "boolean",
-			"youTubeVideoId": "string",
-			"session": {
-				"id": "number",
-				"sessionDate": "string",
-				"sessionName": "string"
-			}
-		}
-	]
+  "result": true,
+  "videosArray": [
+    {
+      "id": "number",
+      "sessionId": "number",
+      "filename": "string",
+      "url": "string",
+      "videoFileSizeInMb": "number",
+      "processingCompleted": "boolean",
+      "processingFailed": "boolean",
+      "youTubeVideoId": "string",
+      "session": {
+        "id": "number",
+        "sessionDate": "string",
+        "sessionName": "string"
+      }
+    }
+  ]
 }
 ```
 
@@ -951,8 +951,8 @@ Uploads a video file and initiates YouTube processing.
 
 ```json
 {
-	"result": true,
-	"message": "All good."
+  "result": true,
+  "message": "All good."
 }
 ```
 
@@ -976,7 +976,7 @@ Deletes a video and removes it from YouTube.
 
 ```json
 {
-	"message": "Video deleted successfully"
+  "message": "Video deleted successfully"
 }
 ```
 
@@ -988,9 +988,9 @@ Queues a video montage creation job.
 
 ```json
 {
-	"videoId": "number (required)",
-	"actionsArray": [],
-	"token": "string"
+  "videoId": "number (required)",
+  "actionsArray": [],
+  "token": "string"
 }
 ```
 
@@ -998,9 +998,9 @@ Queues a video montage creation job.
 
 ```json
 {
-	"result": true,
-	"message": "Job queued successfully",
-	"data": {}
+  "result": true,
+  "message": "Job queued successfully",
+  "data": {}
 }
 ```
 
@@ -1012,7 +1012,7 @@ Notifies user when video montage is complete.
 
 ```json
 {
-	"filename": "string (required)"
+  "filename": "string (required)"
 }
 ```
 
@@ -1061,20 +1061,20 @@ Receives and processes actions from live scripting sessions.
 
 ```json
 {
-	"actionsArray": [
-		{
-			"timestamp": "string (ISO date, required)",
-			"type": "number",
-			"quality": "string",
-			"area": "string",
-			"setNumber": "number",
-			"scoreTeamAnalyzed": "number",
-			"scoreTeamOther": "number",
-			"playerId": "number",
-			"favorite": "boolean"
-		}
-	],
-	"sessionId": "number (required)"
+  "actionsArray": [
+    {
+      "timestamp": "string (ISO date, required)",
+      "type": "number",
+      "quality": "string",
+      "area": "string",
+      "setNumber": "number",
+      "scoreTeamAnalyzed": "number",
+      "scoreTeamOther": "number",
+      "playerId": "number",
+      "favorite": "boolean"
+    }
+  ],
+  "sessionId": "number (required)"
 }
 ```
 
@@ -1082,10 +1082,10 @@ Receives and processes actions from live scripting sessions.
 
 ```json
 {
-	"result": true,
-	"message": "Actions for scriptId: {id}",
-	"scriptId": "number",
-	"actionsCount": "number"
+  "result": true,
+  "message": "Actions for scriptId: {id}",
+  "scriptId": "number",
+  "actionsCount": "number"
 }
 ```
 
@@ -1107,8 +1107,8 @@ All endpoints may return these common error responses:
 
 ```json
 {
-	"result": false,
-	"error": "Invalid request parameters"
+  "result": false,
+  "error": "Invalid request parameters"
 }
 ```
 
@@ -1116,8 +1116,8 @@ All endpoints may return these common error responses:
 
 ```json
 {
-	"result": false,
-	"message": "Invalid token"
+  "result": false,
+  "message": "Invalid token"
 }
 ```
 
@@ -1125,8 +1125,8 @@ All endpoints may return these common error responses:
 
 ```json
 {
-	"result": false,
-	"message": "Insufficient privileges"
+  "result": false,
+  "message": "Insufficient privileges"
 }
 ```
 
@@ -1134,8 +1134,8 @@ All endpoints may return these common error responses:
 
 ```json
 {
-	"result": false,
-	"message": "Resource not found"
+  "result": false,
+  "message": "Resource not found"
 }
 ```
 
@@ -1143,9 +1143,9 @@ All endpoints may return these common error responses:
 
 ```json
 {
-	"result": false,
-	"message": "Internal server error",
-	"error": "Detailed error message"
+  "result": false,
+  "message": "Internal server error",
+  "error": "Detailed error message"
 }
 ```
 
@@ -1153,7 +1153,7 @@ All endpoints may return these common error responses:
 
 ## Database Schema Reference
 
-This API interacts with the KyberVision20Db SQLite database. For detailed information about table structures, relationships, and data types, refer to `docs/DATABASE_SCHEMA_OVERVIEW.md`.
+This API interacts with the KyberVision22Db SQLite database. For detailed information about table structures, relationships, and data types, refer to `docs/DATABASE_SCHEMA_OVERVIEW.md`.
 
 ### Key Entity Relationships:
 

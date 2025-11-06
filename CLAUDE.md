@@ -10,12 +10,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-This is the KyberVision20 API, a TypeScript Express.js API that supersedes KyberVision18API (which was JavaScript-based). The project follows a clean separation between source (`src/`) and compiled output (`dist/`) directories.
+This is the KyberVision22 API. The project follows a clean separation between source (`src/`) and compiled output (`dist/`) directories.
 
 ### Key Dependencies
 
 - **Express.js** - Web framework
-- **KyberVision20Db** - Local database package (file:../KyberVision20Db) providing Sequelize models
+- **KyberVision22Db** - Local database package (file:../KyberVision22Db) providing Sequelize models
 - **Sequelize** - ORM for database operations with SQLite
 - **TypeScript** - Primary language with ts-node for development
 
@@ -36,7 +36,7 @@ src/
 
 ### Database Integration
 
-The API integrates with the KyberVision20Db package which provides:
+The API integrates with the KyberVision22Db package which provides:
 
 - Sequelize models for all entities (Users, Teams, Players, Leagues, Sessions, Videos, etc.)
 - Centralized model initialization via `initModels()`
@@ -45,9 +45,12 @@ The API integrates with the KyberVision20Db package which provides:
 
 Key database entities include core tables (users, teams, players, leagues, sessions, videos, scripts) and contract/relationship tables that manage associations between entities.
 
+- see the docs/DATABASE_OVERVIEW.md for a detailed overview of the database schema.
+
 ### Application Bootstrap
 
 The main application (`src/app.ts`) follows this startup sequence:
+
 1. Load environment variables from `.env`
 2. Initialize database models via `initModels()`
 3. Sync database schema with `sequelize.sync()`
