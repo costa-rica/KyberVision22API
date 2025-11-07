@@ -943,7 +943,7 @@ Gets all videos for a specific team.
 
 ### POST /videos/upload-youtube
 
-Uploads a video file and initiates YouTube processing.
+Uploads a video file to the server and initiates asynchronous YouTube upload processing.
 
 **Request:** Multipart form with `video` file and `sessionId` field
 
@@ -956,13 +956,26 @@ Uploads a video file and initiates YouTube processing.
 }
 ```
 
-**Functionality:**
+**Processing Workflow:**
 
-- Validates user permissions for session
-- Creates video database record
-- Renames file with standardized naming convention
-- Creates video-action contracts for synchronization
-- Queues video for YouTube processing
+This endpoint handles the initial upload and database setup, then delegates YouTube processing to external services:
+
+**Phase 1 - API Responsibilities (Synchronous):**
+- Validates user has team membership permissions for the session
+- Saves uploaded video file to server storage
+- Creates initial Video database record with metadata
+- Renames file using standardized naming convention: `{PREFIX}-videoId{XXXX}-sessionId{ID}.mp4`
+- Creates ContractVideoAction records to link video with session actions for synchronization
+- Sends job request to the Queuer service
+
+**Phase 2 - External Service Processing (Asynchronous):**
+- **Queuer**: Receives the job request and manages the processing queue
+- **YouTubeUploader**: Child process of the Queuer that performs the actual YouTube upload
+  - Uploads video to YouTube platform
+  - Updates Video table with final completion status (`processingCompleted`, `youTubeVideoId`)
+  - Marks upload as failed if errors occur (`processingFailed`)
+
+**Note:** The API response indicates successful queueing, not completion of YouTube upload. The actual YouTube processing happens asynchronously in the YouTubeUploader service.
 
 ### DELETE /videos/:videoId
 
