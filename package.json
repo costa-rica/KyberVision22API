@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon --watch src --exec ts-node src/app.ts",
     "build": "node --max-old-space-size=4096 ./node_modules/.bin/tsc && npm run copy-assets",
-    "copy-assets": "cp -r src/public dist/ && cp -r src/templates dist/",
+    "copy-assets": "cp -r src/public dist/ && cp -r src/templates dist/ && cp .env dist/.env",
     "start": "node dist/server.js"
   },
   "keywords": [],

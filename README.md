@@ -13,7 +13,7 @@ This is a TypeScript Express.js API project. This project is based on the KyberV
 ## .env
 
 ```bash
-APP_NAME=KyberVision22API
+NAME_APP=KyberVision22API
 JWT_SECRET=secret_code
 PATH_DATABASE=/Users/nick/Documents/_databases/KyberVision22
 NAME_DB=kv22.db

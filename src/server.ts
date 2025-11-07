@@ -1,17 +1,17 @@
 import app from "./app"; // Import the configured app
 
 const PORT = parseInt(process.env.PORT || "3000", 10);
-const APP_NAME = process.env.APP_NAME || "KyberVision22API"; // Fallback if APP_NAME is undefined
+const NAME_APP = process.env.NAME_APP || "KyberVision22API"; // Fallback if NAME_APP is undefined
 
 // Override console.log and console.error to include the app name
 console.log = (
   (log) => (message: any) =>
-    log(`[${APP_NAME}] ${message}`)
+    log(`[${NAME_APP}] ${message}`)
 )(console.log);
 
 console.error = (
   (log) => (message: any) =>
-    log(`[${APP_NAME}] ${message}`)
+    log(`[${NAME_APP}] ${message}`)
 )(console.error);
 
 // Capture stack traces for errors
