@@ -28,12 +28,17 @@ PATH_PROJECT_RESOURCES=/Users/nick/Documents/_project_resources/KyberVision22API
 ADMIN_EMAIL_KV_MANAGER_WEBSITE=["nrodrig1@gmail.com"]
 URL_KV_MANAGER_WEBSITE=https://kv22-manager.dashanddata.com
 URL_KV_JOB_QUEUER=http://localhost:8003
-PATH_KV_VIDEO_PROCESSOR=/Users/nick/Documents/KyberVisionVideoProcessor01
-NAME_KV_VIDEO_PROCESSOR=videoProcessor.js
 URL_BASE_KV_API=https://api.kv22.dashanddata.com
 PATH_TEST_REQUEST_ARGS=/Users/nick/Documents/project_resources/KyberVision22API/test_request_args
 NODE_ENV=production
 AUTHENTIFICATION_TURNED_OFF=false
+YOUTUBE_CLIENT_ID=secret.apps.googleusercontent.com
+YOUTUBE_CLIENT_SECRET=secret
+YOUTUBE_REDIRECT_URI=http://localhost
+YOUTUBE_REFRESH_TOKEN=secret
+YOUTUBE_UPLOADER_QUEUE_NAME=KyberVision22YouTubeUploader
+PREFIX_VIDEO_FILE_NAME=kv22
+PATH_PROFILE_PICTURES_PLAYER_DIR=/Users/nick/Documents/_project_resources/KyberVision22API/profile_pictures_player
 ```
 
 ## Folder Structure
