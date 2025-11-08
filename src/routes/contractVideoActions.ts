@@ -16,6 +16,7 @@ router.post(
     try {
       const { newDeltaTimeInSeconds, scriptId, videoId } = req.body;
       console.log(`newDeltaTimeInSeconds: ${newDeltaTimeInSeconds}`);
+      console.log(`scriptId: ${scriptId}, videoId: ${videoId}`);
 
       // Convert parameters to ensure proper types
       const scriptIdNumber = Number(scriptId);
@@ -28,7 +29,12 @@ router.post(
         include: [ContractVideoAction],
       });
 
+      console.log(
+        `Found ${actionsArray.length} actions for scriptId ${scriptIdNumber}`
+      );
+
       if (!actionsArray || actionsArray.length === 0) {
+        console.log(`❌ 404: No actions found for scriptId ${scriptIdNumber}`);
         return res.status(404).json({
           result: false,
           message: `Actions not found`,
@@ -36,15 +42,27 @@ router.post(
         });
       }
 
+      const actionIds = actionsArray.map((action) => action.id);
+      console.log(`Action IDs: [${actionIds.join(", ")}]`);
+
       // Get array of ContractVideoActions where actionId is in actionsArray
       const contractVideoActionsArray = await ContractVideoAction.findAll({
         where: {
-          actionId: actionsArray.map((action) => action.id),
+          actionId: actionIds,
           videoId: videoIdNumber,
         },
       });
 
+      console.log(
+        `Found ${contractVideoActionsArray.length} ContractVideoActions for videoId ${videoIdNumber}`
+      );
+
       if (contractVideoActionsArray.length === 0) {
+        console.log(
+          `❌ 404: No ContractVideoActions found for videoId ${videoIdNumber} with actionIds [${actionIds.join(
+            ", "
+          )}]`
+        );
         return res.status(404).json({
           result: false,
           message: `ContractVideoActions not found for video ${videoIdNumber}`,
@@ -58,6 +76,10 @@ router.post(
         contractVideoActionsArray[i].deltaTimeInSeconds = deltaTimeNumber;
         await contractVideoActionsArray[i].save();
       }
+
+      console.log(
+        `✅ Successfully updated ${contractVideoActionsArray.length} ContractVideoActions with deltaTime ${deltaTimeNumber}`
+      );
 
       res.json({
         result: true,
