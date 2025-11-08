@@ -79,8 +79,21 @@ router.post("/register", async (req: Request, res: Response) => {
 
 // POST /users/login
 router.post("/login", async (req: Request, res: Response) => {
-  const { email, password, userDeviceTimestamp } = req.body;
-  console.log("userDeviceTimestamp: ", userDeviceTimestamp);
+  const {
+    email,
+    password,
+    userDeviceTimestamp,
+    deviceName,
+    deviceType,
+    isTablet,
+    manufacturer,
+    modelName,
+    osName,
+    osVersion,
+  } = req.body;
+
+  // Log the entire request body for testing/verification
+  console.log("📱 POST /users/login - Request Body:", JSON.stringify(req.body, null, 2));
 
   if (!email || !password) {
     return res.status(400).json({ error: "Email and password are required." });
@@ -99,14 +112,21 @@ router.post("/login", async (req: Request, res: Response) => {
     });
   }
   if (userDeviceTimestamp) {
-    // console.log("🚨 Recording ping");
+    console.log("🚨 Recording ping with device data");
     const ping = await recordPing({
       userId: user.id,
       serverTimestamp: new Date(),
       endpointName: "POST /users/login",
       userDeviceTimestamp: new Date(userDeviceTimestamp),
+      deviceName,
+      deviceType,
+      isTablet,
+      manufacturer,
+      modelName,
+      osName,
+      osVersion,
     });
-    // console.log(ping);
+    console.log("✅ Ping recorded:", ping);
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);

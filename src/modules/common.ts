@@ -80,6 +80,13 @@ export function writeRequestArgs(
  * @param args.endpointName          Endpoint label (e.g., "POST /auth/login").
  * @param args.userDeviceTimestamp   Timestamp sent by the device (UTC ISO or Date).
  * @param args.serverTimestamp       Optional server-side timestamp (UTC). If omitted, uses now().
+ * @param args.deviceName            Optional device name (e.g., "iPhone 15 Pro").
+ * @param args.deviceType            Optional device type (e.g., "Tablet").
+ * @param args.isTablet              Optional flag indicating if device is a tablet.
+ * @param args.manufacturer          Optional device manufacturer (e.g., "Apple").
+ * @param args.modelName             Optional device model name.
+ * @param args.osName                Optional OS name (e.g., "iOS").
+ * @param args.osVersion             Optional OS version.
  *
  * @returns { success, pingId?, error? }
  */
@@ -88,6 +95,13 @@ export async function recordPing(args: {
   endpointName: string;
   userDeviceTimestamp: string | Date;
   serverTimestamp?: Date;
+  deviceName?: string;
+  deviceType?: string;
+  isTablet?: boolean;
+  manufacturer?: string;
+  modelName?: string;
+  osName?: string;
+  osVersion?: string;
 }): Promise<{ success: boolean; pingId?: number; error?: string }> {
   try {
     // --- Validate required primitives ---
@@ -120,6 +134,13 @@ export async function recordPing(args: {
       endpointName,
       userDeviceTimestamp: deviceTs, // stored as DATE; treat as UTC
       serverTimestamp: serverTs, // can omit to use DB default; here we pass in for explicitness
+      deviceName: args.deviceName,
+      deviceType: args.deviceType,
+      isTablet: args.isTablet,
+      manufacturer: args.manufacturer,
+      modelName: args.modelName,
+      osName: args.osName,
+      osVersion: args.osVersion,
     });
 
     return { success: true, pingId: (row as any).id };
